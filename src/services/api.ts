@@ -1,10 +1,44 @@
-import { HistoryData, BlogPost, BlogListResponse } from '../types';
+import { History, BlogPost, BlogListResponse, Activity, Partner, Project } from '../types';
+
+export const fetchActivities = (): Promise<Activity[]> => {
+  return new Promise((resolve) => {
+    const activities: Activity[] = Array(8).fill(0).map((_, i) => ({
+      id: `activity-${i}`,
+      title: `Atividade ${i + 1}`,
+      image: `https://placehold.co/300x200`
+    }));
+    resolve(activities);
+  });
+};
+
+export const fetchPartners = (): Promise<Partner[]> => {
+  return new Promise((resolve) => {
+    const partners: Partner[] = Array(8).fill(0).map((_, i) => ({
+      id: `partner-${i}`,
+      name: `Amigo ${i + 1}`,
+      logo: `https://placehold.co/150x100`
+    }));
+    resolve(partners);
+  });
+};
+
+export const fetchProjects = (): Promise<Project[]> => {
+  return new Promise((resolve) => {
+    const projects: Project[] = Array(6).fill(0).map((_, i) => ({
+      id: `project-${i}`,
+      title: `Projeto ${i + 1}`,
+      description: 'Explicação do projeto',
+      image: `https://placehold.co/300x200`
+    }));
+    resolve(projects);
+  });
+};
 
 // Esta função seria substituída por uma chamada real à API
-export const fetchHistoryData = (): Promise<HistoryData> => {
+export const fetchHistoryData = (): Promise<History> => {
   return new Promise((resolve) => {
     // Dados de exemplo - seriam substituídos pelos dados da API real
-    const mockData: HistoryData = {
+    const mockData: History = {
       title: "Nossa História",
       foundationYear: "1998",
       content: [

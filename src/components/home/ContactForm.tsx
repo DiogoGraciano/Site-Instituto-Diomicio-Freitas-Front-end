@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Mail, Phone, MapPin, Facebook, Heart } from 'lucide-react';
-import { FormData } from '../../types';
+import { Contact } from '../../types';
 
 export default function ContactForm() {
-  const [formData, setFormData] = useState<FormData>({
+  const [contact, setContact] = useState<Contact>({
     name: '',
     phone: '',
     subject: '',
@@ -12,7 +12,7 @@ export default function ContactForm() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData(prevState => ({
+    setContact(prevState => ({
       ...prevState,
       [name]: value
     }));
@@ -20,9 +20,9 @@ export default function ContactForm() {
 
   const handleSubmit = () => {
     // Handle form submission logic here
-    console.log('Form submitted:', formData);
+    console.log('Form submitted:', contact);
     // Reset form after submission
-    setFormData({
+    setContact({
       name: '',
       phone: '',
       subject: '',
@@ -84,7 +84,7 @@ export default function ContactForm() {
               type="text"
               id="name"
               name="name"
-              value={formData.name}
+              value={contact.name}
               onChange={handleInputChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
               placeholder="Seu nome"
@@ -97,20 +97,20 @@ export default function ContactForm() {
               type="text"
               id="phone"
               name="phone"
-              value={formData.phone}
+              value={contact.phone}
               onChange={handleInputChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
               placeholder="(00) 0000-0000"
             />
           </div>
-          
+
           <div className="mb-3">
             <label htmlFor="subject" className="block text-sm font-medium mb-1">Assunto</label>
             <input
               type="text"
               id="subject"
               name="subject"
-              value={formData.subject}
+              value={contact.subject}
               onChange={handleInputChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
               placeholder="Assunto da mensagem"
@@ -122,7 +122,7 @@ export default function ContactForm() {
             <textarea
               id="message"
               name="message"
-              value={formData.message}
+              value={contact.message}
               onChange={handleInputChange}
               rows={4}
               className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"

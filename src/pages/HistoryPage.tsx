@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { History, Milestone, Award, Users, Heart, BookOpen } from 'lucide-react';
-import { HistoryData } from '../types';
+import { History, Milestone, Users, Heart, BookOpen } from 'lucide-react';
+import { History as HistoryType } from '../types';
 import { fetchHistoryData } from '../services/api';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
 
 export default function HistoryPage() {
-  const [historyData, setHistoryData] = useState<HistoryData | null>(null);
+  const [historyData, setHistoryData] = useState<HistoryType | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

@@ -17,14 +17,14 @@ export interface Partner {
   logo: string;
 }
 
-export interface FormData {
+export interface Contact {
   name: string;
   phone: string;
   subject: string;
   message: string;
 }
 
-export interface HistoryData {
+export interface History {
   title: string;
   foundationYear: string;
   content: string[];
