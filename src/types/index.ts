@@ -42,6 +42,15 @@ export interface ContactCreateDto {
   message: string;
 }
 
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface CreateHistoryDto {
   title: string;
   foundationYear?: string;

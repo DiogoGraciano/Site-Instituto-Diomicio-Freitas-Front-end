@@ -143,6 +143,98 @@ export const fetchBlogPostById = async (id: string): Promise<BlogPost> => {
   }
 };
 
+// ============= USERS =============
+export const registerUser = async (userData: { name: string; email: string; password: string }) => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_CONFIG.BASE_URL}/auth/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(userData)
+    });
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP ${response.status}: ${errorText}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Erro ao registrar usuário:', error);
+    throw new Error(handleApiError(error));
+  }
+};
+
+export const fetchUsers = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_CONFIG.BASE_URL}/auth/users`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP ${response.status}: ${errorText}`);
+    }
+    
+    const data = await response.json();
+    return data.users;
+  } catch (error) {
+    console.error('Erro ao buscar usuários:', error);
+    throw new Error(handleApiError(error));
+  }
+};
+
+export const updateUser = async (id: string, userData: { name: string; email: string; password?: string }) => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_CONFIG.BASE_URL}/auth/users/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(userData)
+    });
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP ${response.status}: ${errorText}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Erro ao atualizar usuário:', error);
+    throw new Error(handleApiError(error));
+  }
+};
+
+export const deleteUser = async (id: string): Promise<void> => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_CONFIG.BASE_URL}/auth/users/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP ${response.status}: ${errorText}`);
+    }
+  } catch (error) {
+    console.error('Erro ao deletar usuário:', error);
+    throw new Error(handleApiError(error));
+  }
+};
+
 // ============= CONTACTS =============
 export const createContact = async (contactData: ContactCreateDto): Promise<Contact> => {
   try {

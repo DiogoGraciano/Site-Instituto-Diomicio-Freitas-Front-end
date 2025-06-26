@@ -1,16 +1,12 @@
+import { API_CONFIG } from "../config/api";
+
 interface LoginData {
   email: string;
   password: string;
 }
 
-interface RegisterData {
-  email: string;
-  name: string;
-  password: string;
-}
-
 export const loginUser = async (data: LoginData) => {
-  const response = await fetch('http://localhost:3000/auth/login', {
+  const response = await fetch(`${API_CONFIG.BASE_URL}/auth/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -26,25 +22,8 @@ export const loginUser = async (data: LoginData) => {
   return response.json();
 };
 
-export const registerUser = async (data: RegisterData) => {
-  const response = await fetch('http://localhost:3000/auth/register', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message || 'Falha no registro');
-  }
-
-  return response.json();
-};
-
 export const getProfile = async (token: string) => {
-  const response = await fetch('http://localhost:3000/auth/profile', {
+  const response = await fetch(`${API_CONFIG.BASE_URL}/auth/profile`, {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${token}`,

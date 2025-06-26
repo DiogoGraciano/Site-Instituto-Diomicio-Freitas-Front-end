@@ -8,22 +8,15 @@ interface LoginFormProps {
 const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLogin, setIsLogin] = useState(true);
-  const [name, setName] = useState('');
-  const { login, register, error: authError, loading } = useAuth();
+  const { login, error: authError, loading } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     try {
-      if (isLogin) {
-        await login(email, password);
-      } else {
-        await register(email, name, password);
-      }
+      await login(email, password);
       onSuccess();
     } catch (err) {
-      // O erro já é tratado pelo useAuth
       console.error('Erro no formulário:', err);
     }
   };
@@ -33,20 +26,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
       {authError && (
         <div className="p-3 bg-red-100 text-red-700 rounded-md">
           {typeof authError === 'string' ? authError : 'Ocorreu um erro durante o login'}
-        </div>
-      )}
-      
-      {!isLogin && (
-        <div className="space-y-2">
-          <label htmlFor="name" className="block text-gray-700 font-medium">Nome</label>
-          <input
-            type="text"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
         </div>
       )}
       
@@ -92,16 +71,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
             </svg>
             Processando...
           </span>
-        ) : isLogin ? 'Entrar' : 'Registrar'}
-      </button>
-      
-      <button
-        type="button"
-        className="w-full text-center text-blue-600 hover:text-blue-800 transition-colors focus:outline-none disabled:opacity-50"
-        onClick={() => setIsLogin(!isLogin)}
-        disabled={loading}
-      >
-        {isLogin ? 'Criar uma conta' : 'Já tenho uma conta'}
+        ) : 'Entrar'}
       </button>
     </form>
   );

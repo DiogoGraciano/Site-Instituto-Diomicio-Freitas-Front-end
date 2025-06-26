@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { loginUser, registerUser } from '../services/auth';
+import { loginUser } from '../services/auth';
+import { registerUser } from '../services/api';
 
 export const useAuth = () => {
   const [user, setUser] = useState(null);

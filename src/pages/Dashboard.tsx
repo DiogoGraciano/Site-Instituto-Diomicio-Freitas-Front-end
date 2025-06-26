@@ -33,6 +33,11 @@ import {
   // Contacts
   fetchContacts,
   deleteContact,
+  // Users
+  fetchUsers,
+  registerUser,
+  updateUser,
+  deleteUser,
 } from '../services/api';
 import {
   BlogPost,
@@ -40,7 +45,8 @@ import {
   Project,
   Partner,
   History,
-  Contact
+  Contact,
+  User
 } from '../types';
 
 const Dashboard: React.FC = () => {
@@ -66,6 +72,7 @@ const Dashboard: React.FC = () => {
   const [partners, setPartners] = useState<Partner[]>([]);
   const [history, setHistory] = useState<History[]>([]);
   const [contacts, setContacts] = useState<Contact[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -154,6 +161,10 @@ const Dashboard: React.FC = () => {
           const contactsData = await fetchContacts();
           setContacts(contactsData);
           break;
+        case 'users':
+          const usersData = await fetchUsers();
+          setUsers(usersData);
+          break;
       }
     } catch (error) {
       console.error('Erro ao carregar dados:', error);
@@ -200,6 +211,12 @@ const Dashboard: React.FC = () => {
           { name: 'content', label: 'Conteúdo', type: 'array' as const, placeholder: 'Parágrafo do histórico' },
           { name: 'milestones', label: 'Marcos Históricos', type: 'milestones' as const },
         ];
+      case 'users':
+        return [
+          { name: 'name', label: 'Nome', type: 'text' as const, required: true },
+          { name: 'email', label: 'Email', type: 'email' as const, required: true },
+          { name: 'password', label: editingItem ? 'Nova Senha (opcional)' : 'Senha', type: 'password' as const, required: !editingItem, placeholder: editingItem ? 'Deixe em branco para manter a senha atual' : 'Digite a senha (mínimo 6 caracteres)' },
+        ];
       default:
         return [];
     }
@@ -244,6 +261,41 @@ const Dashboard: React.FC = () => {
       setEditingItem(null);
     } catch (error) {
       console.error('Erro ao salvar histórico:', error);
+      throw error;
+    } finally {
+      setFormLoading(false);
+    }
+  };
+
+  // Handle user form submissions with JSON data
+  const handleUserSubmit = async (data: Record<string, any>) => {
+    setFormLoading(true);
+    try {
+      const userData: { name: string; email: string; password?: string } = {
+        name: data.name,
+        email: data.email
+      };
+
+      // Só inclui a senha se foi fornecida (para criação sempre será obrigatória, para edição é opcional)
+      if (data.password && data.password.trim() !== '') {
+        userData.password = data.password;
+      }
+
+      if (editingItem) {
+        await updateUser(editingItem.id, userData);
+      } else {
+        // Para criação, a senha é obrigatória
+        if (!userData.password) {
+          throw new Error('Senha é obrigatória para criar um novo usuário');
+        }
+        await registerUser(userData as { name: string; email: string; password: string });
+      }
+      
+      await loadData();
+      setModalOpen(false);
+      setEditingItem(null);
+    } catch (error) {
+      console.error('Erro ao salvar usuário:', error);
       throw error;
     } finally {
       setFormLoading(false);
@@ -319,6 +371,9 @@ const Dashboard: React.FC = () => {
           break;
         case 'contacts':
           await deleteContact(id);
+          break;
+        case 'users':
+          await deleteUser(id);
           break;
       }
       
@@ -429,6 +484,29 @@ const Dashboard: React.FC = () => {
             </td>
           </>
         );
+      case 'users':
+        return (
+          <>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              {item.name}
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              {item.email}
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                item.isActive 
+                  ? 'bg-green-100 text-green-800' 
+                  : 'bg-red-100 text-red-800'
+              }`}>
+                {item.isActive ? 'Ativo' : 'Inativo'}
+              </span>
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              {new Date(item.createdAt).toLocaleDateString('pt-BR')}
+            </td>
+          </>
+        );
       default:
         return null;
     }
@@ -448,6 +526,8 @@ const Dashboard: React.FC = () => {
         return ['Título', 'Ano Fundação', 'Conteúdo', 'Marcos'];
       case 'contacts':
         return ['Nome', 'Telefone', 'Assunto', 'Mensagem', 'Data'];
+      case 'users':
+        return ['Nome', 'Email', 'Status', 'Criado em'];
       default:
         return [];
     }
@@ -467,6 +547,8 @@ const Dashboard: React.FC = () => {
         return history;
       case 'contacts':
         return contacts;
+      case 'users':
+        return users;
       default:
         return [];
     }
@@ -480,6 +562,7 @@ const Dashboard: React.FC = () => {
       partners: 'Parceiro',
       history: 'Histórico',
       contacts: 'Contato',
+      users: 'Usuário',
     };
     return `${editingItem ? 'Editar' : 'Adicionar'} ${titles[activeTab as keyof typeof titles]}`;
   };
@@ -492,6 +575,7 @@ const Dashboard: React.FC = () => {
       partners: 'Parceiro',
       history: 'Histórico',
       contacts: 'Contato',
+      users: 'Usuário',
     };
     return `Gerenciar ${titles[activeTab as keyof typeof titles]}`;
   };
@@ -552,9 +636,9 @@ const Dashboard: React.FC = () => {
             setModalOpen(false);
             setEditingItem(null);
           }}
-          onSubmit={activeTab === 'history' ? () => Promise.resolve() : handleSubmit}
-          onSubmitJson={activeTab === 'history' ? handleHistorySubmit : undefined}
-          useJsonSubmit={activeTab === 'history'}
+          onSubmit={activeTab === 'history' || activeTab === 'users' ? () => Promise.resolve() : handleSubmit}
+          onSubmitJson={activeTab === 'history' ? handleHistorySubmit : activeTab === 'users' ? handleUserSubmit : undefined}
+          useJsonSubmit={activeTab === 'history' || activeTab === 'users'}
           title={getModalTitle()}
           fields={getFormFields(activeTab)}
           initialData={editingItem || {}}

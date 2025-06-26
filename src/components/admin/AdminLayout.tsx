@@ -17,6 +17,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, activeTab, onTabCha
     { id: 'partners', label: 'Parceiros' },
     { id: 'history', label: 'Histórico' },
     { id: 'contacts', label: 'Contatos' },
+    { id: 'users', label: 'Usuários' },
   ];
 
   return (
