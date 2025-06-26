@@ -164,11 +164,6 @@ export default function BlogPostPage() {
 
               {/* Autor */}
               <div className="flex items-center space-x-4 bg-gray-50 p-4 rounded-lg mt-8">
-                <img 
-                  src={post.authorImage || 'https://placehold.co/100x100'} 
-                  alt={post.author}
-                  className="w-16 h-16 rounded-full object-cover"
-                />
                 <div>
                   <p className="font-medium">{post.author}</p>
                   <p className="text-sm text-gray-600">

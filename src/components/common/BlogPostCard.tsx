@@ -49,15 +49,6 @@ export default function BlogPostCard({ post }: BlogPostCardProps) {
         </p>
         
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <img 
-              src={post.authorImage || 'https://placehold.co/100x100'} 
-              alt={post.author}
-              className="w-8 h-8 rounded-full object-cover"
-            />
-            <span className="text-sm text-gray-700">{post.author}</span>
-          </div>
-          
           <Link 
             to={`/blog/${post.slug}`}
             className="text-blue-700 text-sm hover:text-blue-800 font-medium"
