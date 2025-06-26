@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loginUser, registerUser } from '../services/auth';
 
@@ -8,7 +8,7 @@ export const useAuth = () => {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const login = async (email: string, password: string) => {
+  const login = useCallback(async (email: string, password: string) => {
     setLoading(true);
     setError(null);
     try {
@@ -23,9 +23,9 @@ export const useAuth = () => {
       setLoading(false);
       throw new Error(errorMessage);
     }
-  };
+  }, []);
 
-  const register = async (email: string, name: string, password: string) => {
+  const register = useCallback(async (email: string, name: string, password: string) => {
     setLoading(true);
     setError(null);
     try {
@@ -40,13 +40,13 @@ export const useAuth = () => {
       setLoading(false);
       throw new Error(errorMessage);
     }
-  };
+  }, []);
 
-  const logout = () => {
+  const logout = useCallback(() => {
     localStorage.removeItem('token');
     setUser(null);
     navigate('/login');
-  };
+  }, [navigate]);
 
   return { user, login, register, logout, loading, error };
 };

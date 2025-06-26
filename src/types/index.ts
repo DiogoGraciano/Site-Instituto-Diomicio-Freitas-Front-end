@@ -42,12 +42,20 @@ export interface ContactCreateDto {
   message: string;
 }
 
+export interface CreateHistoryDto {
+  title: string;
+  foundationYear?: string;
+  content?: string[];
+  milestones?: {
+    year: string;
+    event: string;
+  }[];
+}
+
 export interface History {
   id?: string;
   title: string;
   foundationYear?: string;
-  description?: string;
-  date?: string;
   content?: string[];
   milestones?: {
     year: string;
@@ -79,7 +87,6 @@ export interface BlogListResponse {
   currentPage: number;
 }
 
-// Tipos para respostas da API
 export interface ApiResponse<T> {
   data: T;
   message?: string;
@@ -88,43 +95,6 @@ export interface ApiResponse<T> {
 
 export interface PaginatedResponse<T> {
   data: T[];
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
+  currentPage: number;
+  totalPages: number;
 }
-
-// Tipos para DTOs da API
-export interface CreateActivityDto {
-  title: string;
-  description?: string;
-}
-
-export interface CreateProjectDto {
-  title: string;
-  description: string;
-}
-
-export interface CreatePartnerDto {
-  name: string;
-  description?: string;
-}
-
-export interface CreateHistoryDto {
-  title: string;
-  description?: string;
-  date?: string;
-}
-
-export interface CreateBlogPostDto {
-  title: string;
-  slug: string;
-  excerpt: string;
-  content: string;
-  author: string;
-  authorImage?: string;
-  category: string;
-  tags: string[];
-} 

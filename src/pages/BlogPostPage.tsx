@@ -92,11 +92,11 @@ export default function BlogPostPage() {
                 alt={post.title}
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+              <div className="absolute inset-0 bg-black/40"></div>
               <div className="absolute top-4 left-4">
                 <Link 
                   to="/blog"
-                  className="flex items-center text-white bg-blue-700 bg-opacity-90 px-4 py-2 rounded-full text-sm hover:bg-opacity-100 transition"
+                  className="flex items-center text-white bg-blue-700/90 px-4 py-2 rounded-full text-sm hover:bg-blue-700 transition"
                 >
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Voltar para o blog

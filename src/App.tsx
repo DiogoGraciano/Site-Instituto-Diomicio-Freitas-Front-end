@@ -32,8 +32,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
-        {/* Redirecionamento para página inicial caso a rota não exista */}
         <Route path="*" element={<HomePage />} />
       </Routes>
     </Router>

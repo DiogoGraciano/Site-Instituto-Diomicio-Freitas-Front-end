@@ -7,15 +7,12 @@ interface PaginationProps {
 }
 
 export default function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) {
-  // Não renderizar paginação se tivermos apenas uma página
   if (totalPages <= 1) return null;
 
-  // Determinar quais páginas mostrar
   const getPageNumbers = () => {
     const pageNumbers = [];
     const MAX_VISIBLE_PAGES = 5;
     
-    // Se tivermos poucas páginas, mostrar todas
     if (totalPages <= MAX_VISIBLE_PAGES) {
       for (let i = 1; i <= totalPages; i++) {
         pageNumbers.push(i);
@@ -23,14 +20,11 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
       return pageNumbers;
     }
     
-    // Sempre mostrar a primeira página
     pageNumbers.push(1);
     
-    // Calcular o início e fim da janela deslizante
     let startPage = Math.max(2, currentPage - 1);
     let endPage = Math.min(totalPages - 1, currentPage + 1);
     
-    // Ajustar caso a janela deslizante não tenha tamanho suficiente
     if (endPage - startPage + 1 < 3) {
       if (startPage === 2) {
         endPage = Math.min(totalPages - 1, endPage + 1);
@@ -39,22 +33,18 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
       }
     }
     
-    // Adicionar elipses se necessário
     if (startPage > 2) {
       pageNumbers.push('...');
     }
     
-    // Adicionar páginas da janela deslizante
     for (let i = startPage; i <= endPage; i++) {
       pageNumbers.push(i);
     }
     
-    // Adicionar elipses se necessário
     if (endPage < totalPages - 1) {
       pageNumbers.push('...');
     }
     
-    // Sempre mostrar a última página
     if (totalPages > 1) {
       pageNumbers.push(totalPages);
     }
@@ -64,7 +54,6 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
 
   return (
     <div className="flex justify-center items-center mt-8 space-x-1">
-      {/* Botão anterior */}
       <button
         onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
@@ -78,7 +67,6 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
         <ChevronLeft className="w-5 h-5" />
       </button>
       
-      {/* Números de página */}
       {getPageNumbers().map((page, index) => (
         typeof page === 'number' ? (
           <button
@@ -99,7 +87,6 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
         )
       ))}
       
-      {/* Botão próximo */}
       <button
         onClick={() => currentPage < totalPages && onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}

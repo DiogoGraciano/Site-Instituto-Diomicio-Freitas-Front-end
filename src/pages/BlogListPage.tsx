@@ -14,7 +14,6 @@ export default function BlogListPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState('Todos');
 
-  // Efeito para carregar os posts do blog
   useEffect(() => {
     const loadBlogPosts = async () => {
       setLoading(true);
@@ -31,18 +30,15 @@ export default function BlogListPage() {
     loadBlogPosts();
   }, [currentPage]);
 
-  // Lidar com a mudança de página
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Extrair categorias únicas para o filtro
   const categories = blogData?.posts
     ? ['Todos', ...Array.from(new Set(blogData.posts.map(post => post.category)))]
     : ['Todos'];
 
-  // Filtrar posts com base no termo de pesquisa e categoria
   const filteredPosts = blogData?.posts.filter(post => {
     const matchesSearch = searchTerm === '' || 
       post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -71,7 +67,6 @@ export default function BlogListPage() {
       </div>
 
       <main className="container mx-auto px-4 py-8 flex-grow">
-        {/* Barra de pesquisa e filtros */}
         <div className="mb-8">
           <div className="flex flex-col md:flex-row gap-4 mb-4">
             <div className="relative flex-grow">
@@ -123,7 +118,6 @@ export default function BlogListPage() {
               ))}
             </div>
             
-            {/* Paginação - exibir apenas se não houver filtros ativos */}
             {searchTerm === '' && activeCategory === 'Todos' && blogData && (
               <Pagination
                 currentPage={blogData.currentPage}
