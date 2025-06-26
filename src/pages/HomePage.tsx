@@ -4,6 +4,7 @@ import Banner from '../components/home/Banner';
 import ActivitiesSection from '../components/home/ActivitiesSection';
 import ProjectsSection from '../components/home/ProjectsSection';
 import PartnersSection from '../components/home/PartnersSection';
+import DonationSection from '../components/home/DonationSection';
 import ContactForm from '../components/home/ContactForm';
 
 export default function HomePage() {
@@ -38,6 +39,15 @@ export default function HomePage() {
           
           <div className="bg-white/80 backdrop-blur-sm shadow-lg rounded-xl mx-4 md:mx-8 lg:mx-16 p-6 md:p-8 border border-gray-200/50 hover:shadow-xl transition-shadow duration-300">
             <PartnersSection/>
+          </div>
+          
+          <div className="bg-gradient-to-r from-red-500 to-pink-500 py-16 relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+            <div className="relative z-10 mx-4 md:mx-8 lg:mx-16">
+              <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-6 md:p-8 border border-white/20">
+                <DonationSection />
+              </div>
+            </div>
           </div>
           
           <div className="bg-gradient-to-br from-blue-600 to-red-600 py-16 relative overflow-hidden">
